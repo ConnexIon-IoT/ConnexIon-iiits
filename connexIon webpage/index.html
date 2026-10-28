@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ConnexIon, the IoT Club of IIIT Sri City — events, embedded hardware, rapid prototyping, and robotics.">
+  <title>ConnexIon</title>
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/4NGXPpGw/club-logo-cropped.png">
+  
+  <!-- Tailwind CSS & Font Awesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700;0,900;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Anton&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body class="relative selection:bg-sky-500 selection:text-slate-950">
+
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- High-Tech Cyberpunk Glitch Overlay Canvas -->
+  <canvas id="glitch-canvas"></canvas>
+
+  <!-- Circuit Overlay Backdrop -->
+  <div class="circuit-overlay" id="circuit-bg"></div>
+
+  <!-- Persistent 3D Three.js WebGL Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Top Fixed Navigation Header -->
+  <header class="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between pointer-events-auto">
+    <div class="flex items-center gap-3">
+  <a href="#hero-landing" id="logo-home-btn" aria-label="Go to Home">
+      <img src="club_logo.png" alt="ConnexIon Club Logo" class="club-logo-img h-20 md:h-28 object-contain cursor-pointer transition-transform hover:scale-105" />
+    </a>    
+    </div>
+
+    <div class="flex items-center gap-4">
+      <button id="skip-intro-btn" class="glass-card-sm hover:border-sky-400/50 text-sky-400 px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95">
+        Skip Intro
+      </button>
+
+      <button id="theme-switch" class="theme-switch-btn" aria-label="Toggle Dark and Light Mode">
+        <div id="theme-thumb" class="theme-switch-thumb">
+          <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
+        </div>
+      </button>
+
+      <!-- Navigation Menu Toggle Button -->
+      <button id="nav-toggle-btn" class="glass-card-sm text-white hover:text-sky-400 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95" aria-label="Open Menu">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+    </div>
+  </header>
+
+<!-- Full-Screen Navigation Drawer Overlay -->
+<div id="nav-drawer" class="nav-drawer-overlay" aria-hidden="true">
+  <button id="nav-close-btn" class="nav-drawer-close" aria-label="Close Menu">
+    <i class="fa-solid fa-xmark text-2xl"></i>
+  </button>
+
+  <nav class="nav-drawer-content">
+    <a href="#hero-landing" class="nav-drawer-link">HOME</a>
+    <a href="#about-us" class="nav-drawer-link">ABOUT</a>
+    <a href="#events" class="nav-drawer-link">EVENTS</a>
+    <a href="#projects" class="nav-drawer-link">PROJECTS</a>
+    <a href="#team" class="nav-drawer-link">BOARD</a>
+    <a href="#contact" class="nav-drawer-link">CONTACT</a>
+  </nav>
+</div>
+
+  <!-- Main Scroll Track -->
+  <div id="scroll-track" class="relative w-full">
+
+    <!-- SECTION 1: Mascot Landing Page -->
+    <section id="hero-landing" class="relative w-full h-screen flex flex-col justify-end items-center pb-10">
+      <a href="#iot-reveal" class="z-30 flex flex-col items-center text-slate-400 hover:text-sky-400 transition-colors cursor-pointer group">
+        <span class="text-xs uppercase tracking-widest font-semibold mb-2">Scroll to Zoom Into Visor</span>
+        <i class="fa-solid fa-chevron-down text-lg scroll-indicator"></i>
+      </a>
+    </section>
+
+    <!-- SECTION 2: Zoomed Visor Target Page -->
+    <section id="iot-reveal" class="relative z-30 w-full min-h-[140vh] flex flex-col items-center justify-center px-6 text-center py-20">
+      <div id="visor-card" class="visor-content-card w-11/12 max-w-5xl p-8 sm:p-12 md:p-16 opacity-0 select-none my-auto">
+        <h1 class="hero-title-bold visor-text-primary text-5xl sm:text-7xl md:text-8xl text-white tracking-tighter uppercase">
+          THE
+        </h1>
+        <h1 class="hero-title-bold visor-text-accent text-5xl sm:text-7xl md:text-8xl text-sky-400 tracking-tighter drop-shadow-[0_0_2px_rgba(56,189,248,0.2)]">
+          IoT CLUB
+        </h1>
+        
+        <p class="visor-tagline pt-6 text-slate-300 italic font-normal text-base sm:text-xl md:text-2xl tracking-wide">
+          Connecting a Bigger World, One Node at a Time.
+        </p>
+      </div>
+
+      <a href="#about-us" class="z-30 flex flex-col items-center text-slate-400 hover:text-sky-400 transition-colors cursor-pointer group mt-8">
+        <span class="text-xs uppercase tracking-widest font-semibold mb-1">Scroll down to About Us</span>
+        <i class="fa-solid fa-chevron-down text-lg scroll-indicator"></i>
+      </a>
+    </section>
+
+    <!-- SECTION 3: About Us Page -->
+    <section id="about-us" class="about-us-section relative z-30 w-full min-h-screen px-6 py-16 md:px-20 flex flex-col items-center justify-center">
+      <div class="max-w-4xl w-full mx-auto flex flex-col justify-center">
+        
+        <div class="flex items-center gap-3 mb-1">
+          <img src="https://i.postimg.cc/4NGXPpGw/club-logo-cropped.png" alt="ConnexIon Icon" class="h-10 sm:h-12 object-contain" />
+          <h2 class="about-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight">
+            ABOUT <span class="about-accent-text">US</span>
+          </h2>
+        </div>
+
+        <p class="about-subtitle italic text-base sm:text-lg mb-6 font-serif pl-1">
+          Building the Leaders of Tomorrow, Today.
+        </p>
+
+        <p class="about-body-primary text-lg sm:text-xl md:text-2xl font-normal leading-relaxed mb-4">
+          <strong class="about-accent-text font-bold">ConnexIon</strong> is one of the technical clubs of IIIT Sri City which revolves mostly around IoT & Embedded systems. This is an initiative taken to encourage students in IoT & other related fields.
+        </p>
+
+        <p class="about-body-secondary text-lg sm:text-xl md:text-2xl font-normal leading-relaxed mb-8">
+          Members of the club do take part in real time projects based on IoT and other related domains which can help them in developing new skills and gaining knowledge in a more practical way. This will also encourage peer to peer learning among the students.
+        </p>
+
+        <div class="flex items-center gap-3 mb-4">
+          <span class="w-2.5 h-7 bg-sky-400 rounded-xs"></span>
+          <h3 class="about-heading text-2xl sm:text-3xl md:text-4xl font-extrabold uppercase tracking-wide">
+            OUR AIM
+          </h3>
+        </div>
+
+        <ul class="about-body-secondary space-y-4 text-base sm:text-lg md:text-xl font-normal pl-1">
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle about-accent-text text-[8px] sm:text-[10px] mt-2.5 shrink-0"></i>
+            <span>The main motto of this club is to help students gain more practical knowledge through hands-on sessions, projects, and seminars.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle about-accent-text text-[8px] sm:text-[10px] mt-2.5 shrink-0"></i>
+            <span>To let students work and learn about various hardware like Arduino, Raspberry Pi, NodeMCU, Sensors, Actuators, etc., and gain new skills.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle about-accent-text text-[8px] sm:text-[10px] mt-2.5 shrink-0"></i>
+            <span>Host guest lectures by professors from the institute or other organisations to help students understand industry-level aspects and current progress.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle about-accent-text text-[8px] sm:text-[10px] mt-2.5 shrink-0"></i>
+            <span>To represent the college through the club in any technical event.</span>
+          </li>
+        </ul>
+
+      </div>
+
+      <a href="#events" class="z-30 flex flex-col items-center text-slate-400 hover:text-sky-400 transition-colors cursor-pointer group mt-12">
+        <span class="text-xs uppercase tracking-widest font-semibold mb-1">Explore Our Events</span>
+        <i class="fa-solid fa-chevron-down text-lg scroll-indicator"></i>
+      </a>
+    </section>
+
+    <!-- SECTION 4: ConnexIon Events Section -->
+    <section id="events" class="about-us-section relative z-30 w-full min-h-screen px-6 py-16 md:px-20 flex flex-col justify-center" aria-labelledby="events-heading">
+      <div class="max-w-7xl w-full mx-auto">
+        <div class="mb-8 flex flex-wrap items-end justify-between gap-5">
+          <div>
+            <p class="section-kicker mb-3">Discover Our Events</p>
+            <h2 id="events-heading" class="about-heading font-display text-3xl font-bold sm:text-4xl lg:text-5xl uppercase">
+              Events at <span class="about-accent-text">ConnexIon.</span>
+            </h2>
+            <p class="about-subtitle mt-2 max-w-xl text-sm leading-6">Explore ConnexIon's events, workshops, and hands-on technology initiatives at IIIT Sri City.</p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div id="carousel-viewport" class="carousel-viewport relative" aria-label="ConnexIon event archive" tabindex="0">
+            <div id="carousel-track" class="carousel-track"></div>
+          </div>
+        </div>
+        
+        <div class="mt-4 flex justify-end border-t border-slate-700/40 pt-4">
+          <p class="font-mono text-[10px] tracking-widest text-slate-400">CONNEXION / EVENTS ARCHIVE</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: ConnexIon Projects Section -->
+    <section id="projects" class="about-us-section relative z-30 w-full min-h-screen flex flex-col justify-between py-12">
+      <div class="wrap">
+        <div class="stage" id="app" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Projects. Drag, swipe or use the arrow keys to rotate. Click a card to open its details, Escape to return.">
+          <h2 class="big">PROJECTS</h2>
+          <div class="scene" id="scene"><div class="ring" id="ring"></div></div>
+          <aside class="detail" id="detail" inert aria-label="Project details">
+            <div class="dpanel" id="dpanel">
+              <button type="button" class="dx" id="close" aria-label="Close details">&#10005;</button>
+              <div class="dscroll" id="dscroll"><div class="sheets" id="sheets"></div></div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Single-line Tagline & Custom Navigation -->
+        <div class="flex flex-col items-center gap-3 mt-4">
+          <p class="tagline text-slate-300 italic font-serif text-lg sm:text-xl md:text-2xl tracking-wide">
+            stuff we have built, problems we are solving
+          </p>
+
+          <div class="ctrl flex items-center gap-4">
+            <button type="button" id="prev" aria-label="Previous project" class="w-11 h-11 rounded-full border border-sky-400/30 bg-slate-900/80 text-sky-400 hover:bg-sky-400 hover:text-slate-950 transition-colors flex items-center justify-center text-lg">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <span id="count" class="font-mono text-sm text-slate-300 bg-slate-900/90 border border-sky-400/30 px-5 py-2 rounded-full font-medium tracking-wide"></span>
+
+            <button type="button" id="next" aria-label="Next project" class="w-11 h-11 rounded-full border border-sky-400/30 bg-slate-900/80 text-sky-400 hover:bg-sky-400 hover:text-slate-950 transition-colors flex items-center justify-center text-lg">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: ConnexIon Team & Showcase Section -->
+    <section id="team" class="about-us-section relative z-30 w-full min-h-screen py-16 team-page-wrapper">
+      <div class="site-shell">
+        <main id="top">
+          <!-- HERO SECTION -->
+          <section class="hero">
+            <div class="hero-main">
+              <div class="hero-title-row">
+                <h1>THE <span>BOARD</span></h1>
+                <button class="editorial-button" id="open-community-btn">
+                  Join Our Community
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </button>
+              </div>
+              <div class="hero-copy">
+                <p>pilars of our club,<br>the hands that build our community !</p>
+                <button class="borderless-button" id="toggle-members-btn">Hide Members ↑</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- STATS BAND -->
+          <section class="stats-band">
+            <div class="stat-item">
+              <div class="stat-button">
+                <span class="stat-number">45</span>
+                <div>
+                  <span class="stat-title">Active Team Members</span>
+                  <span class="stat-sub">Across all our wings</span>
+                </div>
+              </div>
+            </div>
+            <div class="stat-item">
+              <button class="stat-button" id="toggle-wings-btn">
+                <span class="stat-number">05</span>
+                <div>
+                  <span class="stat-title">Specialized Wings</span>
+                  <span class="stat-sub">View our wings</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: auto; color: var(--muted-foreground);"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+            <div class="stat-item">
+              <button class="stat-button" id="open-alumni-stat-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="oklch(64% 0.218 259)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+                </svg>
+                <div>
+                  <span class="stat-title">Alumni Speaks</span>
+                  <span class="stat-sub">Insights from those who came before</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: auto; color: var(--muted-foreground);"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </button>
+            </div>
+          </section>
+
+          <!-- SPECIALIZED WINGS EXPANSION -->
+          <div class="wings-expansion" id="specialized-wings" hidden>
+            <!-- Electronics Wing -->
+            <button class="quiet-button wing-opt" data-wing="wing-electronics">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
+              </svg>
+              Electronics Wing
+            </button>
+
+            <!-- Mechatronics Wing -->
+            <button class="quiet-button wing-opt" data-wing="wing-mechatronics">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8V4H8"></path>
+                <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+                <path d="M2 14h2"></path>
+                <path d="M20 14h2"></path>
+                <path d="M15 13v2"></path>
+                <path d="M9 13v2"></path>
+              </svg>
+              Mechatronics Wing
+            </button>
+
+            <!-- VLSI Wing -->
+            <button class="quiet-button wing-opt" data-wing="wing-vlsi">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20v2"></path><path d="M12 2v2"></path>
+                <path d="M17 20v2"></path><path d="M17 2v2"></path>
+                <path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path>
+                <path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path>
+                <path d="M7 20v2"></path><path d="M7 2v2"></path>
+                <rect width="16" height="16" x="4" y="4" rx="2"></rect>
+                <rect width="8" height="8" x="8" y="8" rx="1"></rect>
+              </svg>
+              VLSI Wing
+            </button>
+
+            <!-- AI/ML & Web Development -->
+            <button class="quiet-button wing-opt" data-wing="wing-aiml">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m18 16 4-4-4-4"></path>
+                <path d="m6 8-4 4 4 4"></path>
+                <path d="m14.5 4-5 16"></path>
+              </svg>
+              AI/ML & Web Development
+            </button>
+
+            <!-- PR & Management -->
+            <button class="quiet-button wing-opt" data-wing="wing-pr">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path>
+                <path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"></path>
+                <path d="M8 6v8"></path>
+              </svg>
+              PR & Management
+            </button>
+          </div>
+
+          <!-- FACULTY MENTOR -->
+          <section class="faculty-mentor-section">
+            <div class="faculty-mentor-panel">
+              <img class="faculty-mentor-photo" src="images/dr-priyanka-dwivedi.webp" alt="Dr. Priyanka Dwivedi">
+              <div class="faculty-mentor-profile">
+                <p class="faculty-mentor-kicker">Faculty Mentor</p>
+                <h2>Dr. Priyanka Dwivedi</h2>
+                <p class="faculty-mentor-role">Associate Professor</p>
+                <div class="faculty-mentor-facts">
+                  <span><strong>Ph.D.</strong> · Indian Institute of Technology Delhi, India</span>
+                  <span>Associate Dean Academics (DVL) & Associate Dean Faculty (FW)</span>
+                  <a href="mailto:priyanka.dwivedi@iiits.in">priyanka.dwivedi@iiits.in</a>
+                </div>
+              </div>
+              <div class="faculty-research">
+                <h3>Research Works</h3>
+                <div class="faculty-research-list">
+                  <article class="faculty-research-item">
+                    <h4>MoS₂/Porous Silicon Nanostructures for Ethanol Sensing (2017)</h4>
+                    <p>Combines molybdenum disulfide and porous silicon for selective, room-temperature ethanol sensing, with wafer-scale synthesis for practical fabrication.</p>
+                    <div class="research-contribution"><strong style="color: #ffffff;">Key contribution:</strong> Nanomaterial-based ethanol detection for industrial and environmental monitoring.</div>
+                  </article>
+                  <article class="faculty-research-item">
+                    <h4>TiO₂ Nanotube/Porous Silicon Sensor for Ethanol Detection (2017)</h4>
+                    <p>Studies a titanium dioxide nanotube and porous silicon sensor prototype, emphasizing sensitivity, selectivity, and scalable fabrication.</p>
+                    <div class="research-contribution"><strong style="color: #ffffff;">Key contribution:</strong> A sensor design exploring ethanol detection at sub-parts-per-million concentrations.</div>
+                  </article>
+                  <article class="faculty-research-item">
+                    <h4>MoS₂-Based Artificial Synapse for Neuromorphic Computing (2023)</h4>
+                    <p>Explores an optical MoS₂ device that mimics biological synapses and brain-inspired information processing.</p>
+                    <div class="research-contribution"><strong style="color: #ffffff;">Key contribution:</strong> Connects semiconductor materials with artificial synapses and emerging neuromorphic computing.</div>
+                  </article>
+                  <article class="faculty-research-item">
+                    <h4>Stress Classification and Vital-Sign Forecasting for IoT Health Monitoring (2022)</h4>
+                    <p>Uses computational analysis of health data to classify stress and forecast vital signs in IoT-based monitoring.</p>
+                    <div class="research-contribution"><strong style="color: #ffffff;">Key contribution:</strong> Supports connected healthcare, wearable technology, and remote health monitoring.</div>
+                  </article>
+                </div>
+                <div class="research-focus-summary">
+                  <strong style="color: #ffffff;">Research focus:</strong> Nanomaterials, semiconductor devices, chemical sensing, neuromorphic computing, and IoT healthcare—connecting electronic materials and device development with practical sensing, computing, and health applications.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CLUB ADVISOR -->
+          <section class="faculty-mentor-section" style="border-bottom: 0;">
+            <div class="faculty-mentor-panel club-advisor-panel">
+              <img class="faculty-mentor-photo" src="images/mari-venkatesh-m-connexion-club-advisor.webp" alt="Mari Venkatesh M">
+              <div class="faculty-mentor-profile">
+                <p class="faculty-mentor-kicker">Club Advisor</p>
+                <h2>Mari Venkatesh M</h2>
+                <p class="faculty-mentor-role">ConnexIon Club Advisor</p>
+              </div>
+              <div class="club-advisor-message">
+                <h3>A place to explore, build, and belong.</h3>
+                <p>ConnexIon is more than a club — it’s a place where curiosity turns into hands-on experience, ideas become real projects, and learning happens together. Whether you’re just starting out or already passionate about IoT, electronics, and embedded systems, there’s room for you to experiment, collaborate, and grow.</p>
+                <p>Step beyond the classroom, meet people who share your curiosity, take on exciting challenges, and discover what you’re capable of creating. You don’t need to know everything before you begin — just bring your enthusiasm and willingness to learn.</p>
+                <p class="club-advisor-invite"><strong style="color: #ffffff;">Curious to create something?</strong> Join ConnexIon, get involved, and start building your journey with us!</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXECUTIVE BOARD -->
+          <section id="board">
+            <div class="section-heading">
+              <h2><span>01 /</span> The Executive Board</h2>
+              <p style="color:var(--muted-foreground); font-size:12px;">Five wings. One team.</p>
+            </div>
+            <div class="board-grid">
+              <!-- Sandeep TK -->
+              <article class="member-card">
+                <div class="member-inner">
+                  <div class="member-front">
+                    <div class="portrait-stage"><img src="images/sandeep-tk.webp" alt="Sandeep TK"><span class="executive-marker"></span></div>
+                    <div class="member-caption">
+                      <p class="member-wing">PR & Management</p>
+                      <h3>Sandeep TK</h3>
+                      <div class="member-bottom"><span class="role executive-role">Club Coordinator</span><span>↺</span></div>
+                    </div>
+                  </div>
+                  <div class="member-back">
+                    <h3>Sandeep TK</h3>
+                    <dl><dt>Year</dt><dd>UG-3</dd><dt>Email</dt><dd>sandeep.t23@iiits.in</dd></dl>
+                    <span class="role executive-role">Club Coordinator</span>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Souhitya Ghosh -->
+              <article class="member-card">
+                <div class="member-inner">
+                  <div class="member-front">
+                    <div class="portrait-stage"><img src="images/souhitya-ghosh.webp" alt="Souhitya Ghosh" style="object-position: 50% 20%;"><span class="executive-marker"></span></div>
+                    <div class="member-caption">
+                      <p class="member-wing">Electronics</p>
+                      <h3>Souhitya Ghosh</h3>
+                      <div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div>
+                    </div>
+                  </div>
+                  <div class="member-back">
+                    <h3>Souhitya Ghosh</h3>
+                    <dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>souhitya.g25@iiits.in</dd></dl>
+                    <span class="role executive-role">Executive Member</span>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Vignesh P -->
+              <article class="member-card">
+                <div class="member-inner">
+                  <div class="member-front">
+                    <div class="portrait-stage"><img src="images/vignesh-p.webp" alt="Vignesh P"><span class="executive-marker"></span></div>
+                    <div class="member-caption">
+                      <p class="member-wing">Mechatronics</p>
+                      <h3>Vignesh P</h3>
+                      <div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div>
+                    </div>
+                  </div>
+                  <div class="member-back">
+                    <h3>Vignesh P</h3>
+                    <dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>vignesh.pp25@iiits.in</dd></dl>
+                    <span class="role executive-role">Executive Member</span>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Satya Eesa -->
+              <article class="member-card">
+                <div class="member-inner">
+                  <div class="member-front">
+                    <div class="portrait-stage"><img src="images/satya-eesa.webp" alt="Satya Eesa" style="object-position: 50% 20%;"><span class="executive-marker"></span></div>
+                    <div class="member-caption">
+                      <p class="member-wing">VLSI</p>
+                      <h3>Satya Eesa</h3>
+                      <div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div>
+                    </div>
+                  </div>
+                  <div class="member-back">
+                    <h3>Satya Eesa</h3>
+                    <dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>sreesatya.e25@iiits.in</dd></dl>
+                    <span class="role executive-role">Executive Member</span>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Chahat Sharma -->
+              <article class="member-card">
+                <div class="member-inner">
+                  <div class="member-front">
+                    <div class="portrait-stage"><img src="images/chahat-sharma.webp" alt="Chahat Sharma" style="object-position: 50% 20%;"><span class="executive-marker"></span></div>
+                    <div class="member-caption">
+                      <p class="member-wing">AI/ML & Web Development</p>
+                      <h3>Chahat Sharma</h3>
+                      <div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div>
+                    </div>
+                  </div>
+                  <div class="member-back">
+                    <h3>Chahat Sharma</h3>
+                    <dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>chahat.s25@iiits.in</dd></dl>
+                    <span class="role executive-role">Executive Member</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            </section>
+
+          <!-- ALL MEMBERS DIRECTORY -->
+          <section class="directory" id="directory">
+            <h2><span>02 /</span> Our Members</h2>
+            <div class="flex items-center justify-between gap-4 flex-wrap my-3">
+              <h2 class="directory-title !my-0">The people behind Connexion.</h2>
+              <button class="borderless-button" id="explore-members-btn">Explore Members ↓</button>
+            </div>
+            
+            <div class="directory-controls">
+              <div class="search-field">
+                <input type="text" id="member-search" placeholder="Search by name, roll number, or wing...">
+              </div>
+              <div class="filters">
+                <button class="filter-button" aria-pressed="true" data-role="all">All Roles</button>
+                <button class="filter-button" aria-pressed="false" data-role="executive">Executives</button>
+                <button class="filter-button" aria-pressed="false" data-role="member">Members</button>
+              </div>
+            </div>
+            <div class="member-count-label">45 members</div>
+
+            <!-- ELECTRONICS WING -->
+            <div class="wing-section" id="wing-electronics">
+              <div class="wing-heading">
+                <h3>Electronics Wing</h3> <span>09</span>
+              </div>
+              <div class="members-grid">
+                <article class="member-card" data-role="executive"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/souhitya-ghosh.webp" alt="Souhitya Ghosh" style="object-position: 50% 20%;"><span class="executive-marker"></span></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>Souhitya Ghosh</h3><div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Souhitya Ghosh</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>souhitya.g25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/pratishtha-prasoon.webp" alt="Pratishtha Prasoon" style="object-position: 50% 70%;"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>Pratishtha Prasoon</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Pratishtha Prasoon</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>pratishtha.p25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/k-ranga-neelesh.webp" alt="K.Ranga Neelesh"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>K.Ranga Neelesh</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>K.Ranga Neelesh</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>ranganeelesh.k25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/punith-kumar-d.webp" alt="Punith Kumar D"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>Punith Kumar D</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Punith Kumar D</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>punithkumar.d25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/kandhavel-a.webp" alt="Kandhavel A"></div><div class="member-caption"><p class="member-wing">Electronics Wing</p><h3>Kandhavel A</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Kandhavel A</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>kandhavel.a26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/divyateja.webp" alt="Divyateja"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>Divyateja</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Divyateja</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>divyateja.u26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/suki-s.webp" alt="SUKI S" style="object-position: 50% 20%;"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>SUKI S</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>SUKI S</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>suki.s26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/mittapalli-yasaswini.webp" alt="MITTAPALLI YASASWINI" style="object-position: 50% 20%;"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>MITTAPALLI YASASWINI</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>MITTAPALLI YASASWINI</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>yasaswini.m26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/satwik-kulkarni.webp" alt="Satwik Kulkarni"></div><div class="member-caption"><p class="member-wing">Electronics</p><h3>Satwik Kulkarni</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Satwik Kulkarni</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>satwik.k26@iiits.in</dd></dl></div></div></article>
+              </div>
+            </div>
+
+            <!-- MECHATRONICS WING -->
+            <div class="wing-section" id="wing-mechatronics">
+              <div class="wing-heading">
+                <h3>Mechatronics Wing</h3> <span>09</span>
+              </div>
+              <div class="members-grid">
+                <article class="member-card" data-role="executive"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/vignesh-p.webp" alt="Vignesh P"><span class="executive-marker"></span></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>Vignesh P</h3><div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Vignesh P</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>vignesh.pp25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/tishya-yadlapalli.webp" alt="Tishya Yadlapalli" style="object-position: 70% 30%;"></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>Tishya Yadlapalli</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Tishya Yadlapalli</h3><dl><dt>Year</dt><dd>UG-3</dd><dt>Email</dt><dd>tishyanagasaisri.y24@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/reguri-niroop-reddy.webp" alt="Reguri Niroop Reddy"></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>Reguri Niroop Reddy</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Reguri Niroop Reddy</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>niroopreddy.r26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/gudepu-hamsitha.webp" alt="GUDEPU HAMSITHA" style="object-position: 80% 20%;"></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>GUDEPU HAMSITHA</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>GUDEPU HAMSITHA</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>hamsitha.g25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/meeniga-rakshitha.webp" alt="Meeniga Rakshitha"></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>Meeniga Rakshitha</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Meeniga Rakshitha</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>rakshitha.m26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/adithi-govindan.webp" alt="Adithi Govindan"></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>Adithi Govindan</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Adithi Govindan</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>adithi.g26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/manaswini-nandipati.webp" alt="Manaswini Nandipati" style="object-position: 50% 20%;"></div><div class="member-caption"><p class="member-wing">Mechatronics</p><h3>Manaswini Nandipati</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Manaswini Nandipati</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>manaswini.n26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/g-harish.webp" alt="G Harish" style="object-position: 50% 20%;"></div><div class="member-caption"><p class="member-wing">Mechatronics Wing</p><h3>G Harish</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>G Harish</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>harish.c26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/khavishwar-s.webp" alt="Khavishwar S"></div><div class="member-caption"><p class="member-wing">Mechatronics Wing</p><h3>Khavishwar S</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Khavishwar S</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>khavishwar.s26@iiits.in</dd></dl></div></div></article>
+              </div>
+            </div>
+
+            <!-- VLSI WING -->
+            <div class="wing-section" id="wing-vlsi">
+              <div class="wing-heading">
+                <h3>VLSI Wing</h3> <span>08</span>
+              </div>
+              <div class="members-grid">
+                <article class="member-card" data-role="executive"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/satya-eesa.webp" alt="Satya Eesa" style="object-position: 70% 30%;"><span class="executive-marker"></span></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>Satya Eesa</h3><div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Satya Eesa</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>sreesatya.e25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/sahasra-putta.webp" alt="Sahasra Putta"></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>Sahasra Putta</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Sahasra Putta</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>sahasra.p25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/p-vignesh.webp" alt="P vignesh" style="object-position: 50% 20%;"></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>P vignesh</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>P vignesh</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>vignesh.p25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/anantharaman-vl.webp" alt="Anantharaman VL"></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>Anantharaman VL</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Anantharaman VL</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>anantharaman.v25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/gantasala-loka-veera-teja.webp" alt="Gantasala Loka Veera Teja" style="object-position: 70% 30%;"></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>Gantasala Loka Veera Teja</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Gantasala Loka Veera Teja</h3><dl><dt>Year</dt><dd>UG-3</dd><dt>Email</dt><dd>lokaveerasheshasaiteja.g24@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/pranav-kapsimey.webp" alt="Pranav Kapsimey"></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>Pranav Kapsimey</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Pranav Kapsimey</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>pranav.k25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/devdatta-shewale.webp" alt="DEVDATTA SHEWALE"></div><div class="member-caption"><p class="member-wing">VLSI</p><h3>DEVDATTA SHEWALE</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>DEVDATTA SHEWALE</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>ashokshewale.d26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/vasudevan-m.webp" alt="Vasudevan M"></div><div class="member-caption"><p class="member-wing">VLSI Wing</p><h3>Vasudevan M</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Vasudevan M</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>vasudevan.m26@iiits.in</dd></dl></div></div></article>
+              </div>
+            </div>
+
+            <!-- AI/ML & WEB DEVELOPMENT WING -->
+            <div class="wing-section" id="wing-aiml">
+              <div class="wing-heading">
+                <h3>AI/ML & Web Development</h3> <span>14</span>
+              </div>
+              <div class="members-grid">
+                <article class="member-card" data-role="executive"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/chahat-sharma.webp" alt="Chahat Sharma" style="object-position: 50% 20%;"><span class="executive-marker"></span></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Chahat Sharma</h3><div class="member-bottom"><span class="role executive-role">Executive Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Chahat Sharma</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>chahat.s25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/shri-charan-r.webp" alt="Shri Charan R"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Shri Charan R</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Shri Charan R</h3><dl><dt>Year</dt><dd>UG-3</dd><dt>Email</dt><dd>shricharan.r24@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/k-dhinesh.webp" alt="K DHINESH"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>K DHINESH</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>K DHINESH</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>dhinesh.k25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/hrithickraj-s.webp" alt="Hrithickraj S" style="object-position: 50% 10%;"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Hrithickraj S</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Hrithickraj S</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>hrithickraj.s25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/rishi-vikrant.webp" alt="Rishi Vikrant"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Rishi Vikrant</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Rishi Vikrant</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>rishivikrant.r25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/n-vivek.webp" alt="N Vivek"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>N Vivek</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>N Vivek</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>vivek.n25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/shivaranjan-v.webp" alt="Shivaranjan V"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Shivaranjan V</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Shivaranjan V</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>shivaranjan.v25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/h-rohit.webp" alt="H Rohit"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>H Rohit</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>H Rohit</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>rohit.h25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/illendula-rithvik.webp" alt="ILLENDULA RITHVIK"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>ILLENDULA RITHVIK</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>ILLENDULA RITHVIK</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>rithvik.i25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/s-manu-akash.webp" alt="S. Manu Akash" style="object-position: 90% 10%;"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>S. Manu Akash</h3><div class="member-bottom"><span class="role">Club Member</span><span>↺</span></div></div></div><div class="member-back"><h3>S. Manu Akash</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>manu.a25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/n-jaswanth.webp" alt="N.Jaswanth"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>N.Jaswanth</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>N.Jaswanth</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>jaswanth.n25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/elaneethan-s.webp" alt="Elaneethan S"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Elaneethan S</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Elaneethan S</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>elaneethan.s26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/rahul-s.webp" alt="Rahul S"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>Rahul S</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Rahul S</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>rahul.s26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/l-gnana-datta.webp" alt="L Gnana Datta"></div><div class="member-caption"><p class="member-wing">AI/ML & Web Development</p><h3>L Gnana Datta</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>L Gnana Datta</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>gnanadatta.l26@iiits.in</dd></dl></div></div></article>
+              </div>
+            </div>
+
+            <!-- PR & MANAGEMENT WING -->
+            <div class="wing-section" id="wing-pr">
+              <div class="wing-heading">
+                <h3>PR & Management</h3> <span>05</span>
+              </div>
+              <div class="members-grid">
+                <article class="member-card" data-role="executive"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/sandeep-tk.webp" alt="Sandeep TK"><span class="executive-marker"></span></div><div class="member-caption"><p class="member-wing">PR & Management</p><h3>Sandeep TK</h3><div class="member-bottom"><span class="role executive-role">Club Coordinator</span><span>↺</span></div></div></div><div class="member-back"><h3>Sandeep TK</h3><dl><dt>Year</dt><dd>UG-3</dd><dt>Email</dt><dd>sandeep.t23@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/vattigunta-harshavardhan.webp" alt="Vattigunta Harshavardhan"></div><div class="member-caption"><p class="member-wing">PR & Management</p><h3>Vattigunta Harshavardhan</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Vattigunta Harshavardhan</h3><dl><dt>Year</dt><dd>UG-2</dd><dt>Email</dt><dd>vattigunta.h25@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/gudla-suvan-karthikeya.webp" alt="Gudla Suvan Karthikeya" style="object-position: 50% 20%;"></div><div class="member-caption"><p class="member-wing">PR & Management</p><h3>Gudla Suvan Karthikeya</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Gudla Suvan Karthikeya</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>suvankarthikeya.g26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/batchu-akarsh.webp" alt="Batchu Akarsh"></div><div class="member-caption"><p class="member-wing">PR & Management</p><h3>Batchu Akarsh</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Batchu Akarsh</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>akarsh.b26@iiits.in</dd></dl></div></div></article>
+                <article class="member-card" data-role="member"><div class="member-inner"><div class="member-front"><div class="portrait-stage"><img src="images/chintala-sai-smruti-sahitya.webp" alt="Chintala Sai Smruti Sahitya"></div><div class="member-caption"><p class="member-wing">PR & Management</p><h3>Chintala Sai Smruti Sahitya</h3><div class="member-bottom"><span class="role">Member</span><span>↺</span></div></div></div><div class="member-back"><h3>Chintala Sai Smruti Sahitya</h3><dl><dt>Year</dt><dd>UG-1</dd><dt>Email</dt><dd>saismrutisahitya.c26@iiits.in</dd></dl></div></div></article>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </section>
+
+    <!-- SECTION 7: CONTACT US & FOOTER SECTION -->
+    <section id="contact" class="contact-section relative z-30 w-full min-h-screen">
+      <div class="site-shell">
+        <div class="hero-main">
+          <h1>CONTACT <span>US.</span></h1>
+        </div>
+
+        <!-- COMPACT FORM PANEL -->
+        <div class="form-panel">
+          <form id="contactForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="name">Your Name *</label>
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" required maxlength="100">
+              </div>
+
+              <div class="field">
+                <label for="email">Email Address *</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required maxlength="254">
+              </div>
+
+              <div class="field full">
+                <label for="reason">Enquiry Type *</label>
+                <select id="reason" name="reason" required>
+                  <option value="" disabled selected>Select an enquiry type</option>
+                  <option>General enquiry</option>
+                  <option>Club membership</option>
+                  <option>Event or workshop</option>
+                  <option>Project collaboration</option>
+                  <option>Partnership</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label for="subject">Subject *</label>
+                <input id="subject" name="subject" type="text" placeholder="Short subject for your message" required maxlength="150">
+              </div>
+
+              <div class="field full">
+                <label for="message">Your Message *</label>
+                <textarea id="message" name="message" placeholder="Tell us a little more about your enquiry..." required maxlength="3000"></textarea>
+              </div>
+            </div>
+
+            <div class="submit-row">
+              <button class="editorial-button" type="submit">
+                Send Email
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7Z"/></svg>
+              </button>
+              <span class="form-note">Opens your default email app with all details prefilled.</span>
+              <div class="status-box" id="formStatus" role="status" aria-live="polite"></div>
+            </div>
+          </form>
+        </div>
+
+        <!-- CONSOLIDATED FOOTER -->
+        <footer class="site-footer">
+          <div class="footer-grid">
+            <div class="footer-col">
+              <h3>CONNEX<span>ION</span></h3>
+              <p>The IoT Club of IIIT Sri City. A student community dedicated to embedded systems, robotics, VLSI, and modern hardware innovation.</p>
+            </div>
+
+            <div class="footer-col">
+              <h3>Campus Location</h3>
+              <address>
+                IIIT Sri City, 630 Gnan Marg,<br>
+                Sri City, Tirupati District,<br>
+                Andhra Pradesh 517646, India
+              </address>
+              <p style="margin-top: 6px;">
+                <a href="https://www.google.com/maps/search/?api=1&amp;query=IIIT+Sri+City%2C+630+Gnan+Marg%2C+Sri+City%2C+Andhra+Pradesh+517646" target="_blank" rel="noopener noreferrer">Open Google Maps →</a>
+              </p>
+            </div>
+
+            <div class="footer-col">
+              <h3>Direct Contact</h3>
+              <p>Email & Official Portal:</p>
+              <div class="social-links-row">
+                <a href="mailto:iot.club@iiits.in" id="clubEmailBtn" class="social-icon-btn" aria-label="Email Us" title="iot.club@iiits.in">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                </a>
+                <a href="https://www.iiits.ac.in" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="IIIT Sri City Website" title="IIIT Sri City Official Website">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="footer-col">
+              <h3>Social Handles</h3>
+              <p>Follow our channels:</p>
+              <div class="social-links-row">
+                <a href="https://www.linkedin.com/company/connexion-the-iot-club/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="LinkedIn" title="LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 8.5H3.2V21h3.3V8.5ZM4.85 3a1.93 1.93 0 1 0 0 3.86 1.93 1.93 0 0 0 0-3.86ZM21 13.8c0-3.76-2-5.51-4.67-5.51a4.03 4.03 0 0 0-3.62 1.99V8.5H9.4V21h3.31v-6.19c0-1.63.31-3.2 2.32-3.2 1.98 0 2 1.86 2 3.31V21H21v-7.2Z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/connexion_iiits/" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Instagram" title="Instagram">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copyright Info above the border line -->
+          <div class="flex justify-between items-center text-xs text-slate-400 pb-4">
+            <span>ConnexIon IoT Club · IIIT Sri City</span>
+            <span>© <span id="year">2026</span> All rights reserved.</span>
+          </div>
+
+          <div class="footer-bottom"></div>
+        </footer>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Event Detail Modal -->
+  <div id="event-modal" class="modal-backdrop" aria-hidden="true">
+    <section id="modal-panel" class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+      <div class="relative overflow-hidden border-b border-slate-700/40 px-6 pb-7 pt-8 sm:px-9">
+        <div class="relative z-10 pr-12">
+          <div id="modal-badges" class="mb-3 flex flex-wrap gap-2"></div>
+          <h2 id="modal-title" class="font-display text-3xl font-bold leading-tight sm:text-4xl"></h2>
+          <p id="modal-date" class="mt-2 font-mono text-xs text-slate-300"></p>
+        </div>
+        <button id="modal-close" class="modal-close" aria-label="Close event details"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div id="modal-content"></div>
+    </section>
+  </div>
+
+  <!-- ALUMNI SPEAKS DIALOG MODAL -->
+  <dialog class="showcase-dialog" id="alumni-dialog">
+    <div class="dialog-panel alumni-dialog-panel alumni-dialog">
+      <button class="dialog-close close-dialog">&times;</button>
+      
+      <div class="alumni-header">
+        <h2 class="alumni-title"><span class="alumni-accent">ALUMNI</span> <span class="speaks-text">SPEAKS</span></h2>
+        <p>Insights from those who came before</p>
+      </div>
+      
+      <div class="alumni-list">
+        <!-- Kannan M -->
+        <article class="alumni-card">
+          <div class="alumni-avatar"><img src="images/kannan-m.webp" alt="Kannan M"></div>
+          <div>
+            <div class="alumni-meta">
+              <div>
+                <h3 class="alumni-name">Kannan M</h3>
+                <p class="alumni-title">Associate Engineer, Caterpillar</p>
+              </div>
+              <span class="alumni-batch">Batch of ’25</span>
+            </div>
+            <p class="alumni-quote">Connexion will always be special to me, it’s the place where I first learned leadership, management, and administration, and it’s also where I found all my closest friends. What started as a fun space to share ideas soon turned into a journey of growth, filled with late-night planning, endless discussions, and little wins that we celebrated together. Everything I learned here has played a huge role in shaping who I am today and has brought me to where I stand now.</p>
+          </div>
+        </article>
+
+        <!-- Adi Narayana -->
+        <article class="alumni-card">
+          <div class="alumni-avatar"><img src="images/adi-narayana.webp" alt="Adi Narayana"></div>
+          <div>
+            <div class="alumni-meta">
+              <div>
+                <h3 class="alumni-name">Adi Narayana</h3>
+                <p class="alumni-title">Assistant Engineer, Planys Technologies</p>
+              </div>
+              <span class="alumni-batch">Batch of ’25</span>
+            </div>
+            <p class="alumni-quote">Being part of Connexion during my academics gave me the chance to explore, experiment, organize, and communicate better, not just on the technical side, but also in understanding people, sharing ideas, and working in a team. Connexion is that place where you can start building from the very beginning. It’s not just about projects or events, it’s a gateway to explore new areas, opportunities, and networks that can open many routes for your future. Be enthusiastic, make the most of it, and I hope you’ll have a wonderful time being part of it.</p>
+          </div>
+        </article>
+
+        <!-- Sreyas Nilagiri -->
+        <article class="alumni-card">
+          <div class="alumni-avatar"><img src="images/sreyas-nilagiri.webp" alt="Sreyas Nilagiri"></div>
+          <div>
+            <div class="alumni-meta">
+              <div>
+                <h3 class="alumni-name">Sreyas Nilagiri</h3>
+                <p class="alumni-title">Pursuing Masters, Technical University of Munich</p>
+              </div>
+              <span class="alumni-batch">Batch of ’24</span>
+            </div>
+            <p class="alumni-quote">When I joined Connexion, we were just 8 members organizing hackathons. With support from professors, we connected with industries, gained funding, and hands-on experience. That journey helped me get into one of the best universities for electronics—and if I can do it, anyone can. My advice: don’t wait for things to fall into place. Create your own path, experiment, and don’t be afraid to try. I hope the club helps you grow and achieve your goals as it did for me.</p>
+          </div>
+        </article>
+
+        <!-- Sharan Karthick -->
+        <article class="alumni-card">
+          <div class="alumni-avatar"><img src="images/sharan-karthick.webp" alt="Sharan Karthick"></div>
+          <div>
+            <div class="alumni-meta">
+              <div>
+                <h3 class="alumni-name">Sharan Karthick</h3>
+                <p class="alumni-title">Former Club Lead, ConnexIon</p>
+              </div>
+              <span class="alumni-batch">Batch of ’26</span>
+            </div>
+            <p class="alumni-quote">My journey with ConnexIon has been one of the most memorable parts of my life at IIITS. What started as an opportunity to explore IoT, circuits, and embedded systems turned into something much bigger (and, at times, a fair bit more chaotic than expected!). From working on projects and organising events, from TechTales to HawkinsTrail, to eventually leading the club, I've learned a lot beyond just the technical side of things. Be it figuring out why something refuses to work five minutes before a demo, or somehow turning a random idea into an actual event, there's never really been a dull moment! ConnexIon taught me how to work with people, take responsibility, deal with the occasional chaos, and turn ideas into something real. More than anything, it gave me a space to experiment, make mistakes, learn, and grow alongside some absolutely brilliant people. Looking back, I'm genuinely glad I got to be part of this journey. And I hope ConnexIon continues to inspire curious minds to build, explore, break things (hopefully not too expensive to fix!), and push beyond what they learn in the classroom. After all, that's where the real fun begins. Cheers!</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- WHATSAPP COMMUNITY MODAL WITH SPECIFIC CLICKABLE COMMUNITY LINK -->
+  <dialog class="showcase-dialog" id="community-dialog">
+    <div class="dialog-panel community-dialog-panel">
+      <button class="dialog-close close-dialog">&times;</button>
+      <p style="color: var(--community-accent); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">COMMUNITY INVITATION</p>
+      
+      <div class="whatsapp-badge">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      </div>
+
+      <h2 class="directory-invitation-title community-title">Join our <span>Connexion</span> WhatsApp community for further updates</h2>
+      
+      <a href="https://chat.whatsapp.com/Ij1QmOE2dsqCJhv9rsJjMD" target="_blank" rel="noopener noreferrer" class="qr-link" title="Click to join WhatsApp Community">
+        <div class="qr-frame">
+          <svg width="190" height="190" viewBox="0 0 41 41" role="img" xmlns="http://www.w3.org/2000/svg">
+            <title>WhatsApp community QR code</title>
+            <path fill="#FFFFFF" d="M0,0 h41v41H0z" shape-rendering="crispEdges"></path>
+            <path fill="#000000" shape-rendering="crispEdges" d="M0 0h7v1H0zM8 0h2v1H8zM18 0h2v1H18zM24 0h1v1H24zM27 0h1v1H27zM29 0h2v1H29zM34,0 h7v1H34zM0 1h1v1H0zM6 1h1v1H6zM8 1h1v1H8zM12 1h2v1H12zM16 1h2v1H16zM20 1h1v1H20zM23 1h1v1H23zM27 1h2v1H27zM30 1h1v1H30zM32 1h1v1H32zM34 1h1v1H34zM40,1 h1v1H40zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM9 2h3v1H9zM13 2h3v1H13zM20 2h1v1H20zM22 2h1v1H22zM26 2h3v1H26zM30 2h2v1H30zM34 2h1v1H34zM36 2h3v1H36zM40,2 h1v1H40zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h3v1H8zM16 3h4v1H16zM21 3h5v1H21zM27 3h5v1H27zM34 3h1v1H34zM36 3h3v1H36zM40,3 h1v1H40zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h2v1H8zM15 4h2v1H15zM19 4h1v1H19zM22 4h1v1H22zM27 4h1v1H27zM30 4h1v1H30zM34 4h1v1H34zM36 4h3v1H36zM40,4 h1v1H40zM0 5h1v1H0zM6 5h1v1H6zM8 5h2v1H8zM13 5h4v1H13zM20 5h1v1H20zM22 5h2v1H22zM25 5h1v1H25zM27 5h1v1H27zM29 5h1v1H29zM31 5h1v1H31zM34 5h1v1H34zM40,5 h1v1H40zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14 6h1v1H14zM16 6h1v1H16zM18 6h1v1H18zM20 6h1v1H20zM22 6h1v1H22zM24 6h1v1H24zM26 6h1v1H26zM28 6h1v1H28zM30 6h1v1H30zM32 6h1v1H32zM34,6 h7v1H34zM9 7h1v1H9zM16 7h3v1H16zM20 7h1v1H20zM23 7h3v1H23zM28 7h4v1H28zM3 8h1v1H3zM6 8h1v1H6zM9 8h3v1H9zM13 8h4v1H13zM18 8h3v1H18zM22 8h2v1H22zM25 8h3v1H25zM35 8h3v1H35zM39,8 h2v1H39zM0 9h2v1H0zM3 9h3v1H3zM7 9h1v1H7zM9 9h1v1H9zM11 9h1v1H11zM13 9h4v1H13zM19 9h5v1H19zM28 9h1v1H28zM32 9h3v1H32zM37,9 h4v1H37zM0 10h1v1H0zM2 10h2v1H2zM5 10h3v1H5zM10 10h1v1H10zM12 10h1v1H12zM18 10h1v1H18zM20 10h1v1H20zM22 10h3v1H22zM29 10h1v1H29zM31 10h1v1H31zM33 10h2v1H33zM37 10h3v1H37zM1 11h3v1H1zM5 11h1v1H5zM8 11h5v1H8zM14 11h1v1H14zM16 11h2v1H16zM19 11h1v1H19zM22 11h1v1H22zM24 11h1v1H24zM28 11h1v1H28zM30 11h1v1H30zM33 11h2v1H33zM38,11 h3v1H38zM0 12h1v1H0zM4 12h1v1H4zM6 12h2v1H6zM12 12h1v1H12zM15 12h1v1H15zM17 12h2v1H17zM23 12h2v1H23zM27 12h3v1H27zM31 12h1v1H31zM33 12h1v1H33zM35 12h1v1H35zM37 12h1v1H37zM0 13h1v1H0zM5 13h1v1H5zM8 13h1v1H8zM11 13h1v1H11zM14 13h1v1H14zM17 13h1v1H17zM20 13h6v1H20zM27 13h1v1H27zM33 13h2v1H33zM39 13h1v1H39zM0 14h1v1H0zM3 14h1v1H3zM6 14h1v1H6zM8 14h1v1H8zM10 14h4v1H10zM15 14h2v1H15zM18 14h1v1H18zM20 14h1v1H20zM26 14h3v1H26zM30 14h1v1H30zM32 14h1v1H32zM34 14h1v1H34zM36 14h2v1H36zM39,14 h2v1H39zM0 15h2v1H0zM5 15h1v1H5zM7 15h2v1H7zM10 15h1v1H10zM15 15h1v1H15zM18 15h3v1H18zM22 15h3v1H22zM28 15h2v1H28zM31 15h1v1H31zM34 15h2v1H34zM1 16h1v1H1zM4 16h4v1H4zM9 16h1v1H9zM12 16h1v1H12zM14 16h2v1H14zM18 16h3v1H18zM23 16h1v1H23zM27 16h3v1H27zM31 16h2v1H31zM35 16h1v1H35zM0 17h3v1H0zM5 17h1v1H5zM8 17h2v1H8zM11 17h4v1H11zM17 17h6v1H17zM24 17h3v1H24zM28 17h1v1H28zM31 17h1v1H31zM34 17h2v1H34zM39,17 h2v1H39zM2 18h1v1H2zM6 18h2v1H6zM9 18h2v1H9zM15 18h3v1H15zM20 18h3v1H20zM24 18h3v1H24zM30 18h1v1H30zM34 18h1v1H34zM36,18 h5v1H36zM1 19h2v1H1zM5 19h1v1H5zM8 19h2v1H8zM11 19h4v1H11zM19 19h3v1H19zM23 19h1v1H23zM25 19h1v1H25zM27 19h4v1H27zM33 19h3v1H33zM37 19h1v1H37zM39,19 h2v1H39zM0 20h2v1H0zM3 20h1v1H3zM5 20h2v1H5zM10 20h3v1H10zM14 20h1v1H14zM16 20h3v1H16zM20 20h4v1H20zM26 20h5v1H26zM33 20h4v1H33zM2 21h1v1H2zM7 21h4v1H7zM12 21h1v1H12zM16 21h1v1H16zM19 21h1v1H19zM21 21h1v1H21zM25 21h2v1H25zM28 21h1v1H28zM30 21h1v1H30zM32 21h1v1H32zM34 21h2v1H34zM37,21 h4v1H37zM1 22h2v1H1zM4 22h3v1H4zM9 22h2v1H9zM14 22h5v1H14zM21 22h2v1H21zM24 22h2v1H24zM28 22h1v1H28zM30 22h4v1H30zM36 22h2v1H36zM39 22h1v1H39zM4 23h1v1H4zM7 23h2v1H7zM14 23h1v1H14zM16 23h2v1H16zM19 23h2v1H19zM22 23h1v1H22zM24 23h2v1H24zM27 23h1v1H27zM33 23h1v1H33zM35 23h1v1H35zM38 23h2v1H38zM2 24h3v1H2zM6 24h1v1H6zM8 24h1v1H8zM11 24h2v1H11zM15 24h3v1H15zM21 24h1v1H21zM23 24h2v1H23zM26 24h4v1H26zM31 24h5v1H31zM38 24h1v1H38zM40,24 h1v1H40zM1 25h5v1H1zM8 25h2v1H8zM11 25h1v1H11zM14 25h1v1H14zM18 25h1v1H18zM20 25h1v1H20zM23 25h1v1H23zM28 25h1v1H28zM31 25h1v1H31zM35 25h1v1H35zM37 25h1v1H37zM39,25 h2v1H39zM1 26h2v1H1zM4 26h3v1H4zM9 26h2v1H9zM12 26h1v1H12zM18 26h1v1H18zM20 26h1v1H20zM22 26h3v1H22zM28 26h2v1H28zM32 26h1v1H32zM34 26h1v1H34zM36 26h1v1H36zM39,26 h2v1H39zM1 27h2v1H1zM7 27h1v1H7zM10 27h1v1H10zM12 27h1v1H12zM15 27h1v1H15zM21 27h2v1H21zM24 27h1v1H24zM27 27h4v1H27zM32 27h1v1H32zM40,27 h1v1H40zM0 28h2v1H0zM4 28h3v1H4zM9 28h2v1H9zM14 28h2v1H14zM17 28h3v1H17zM21 28h1v1H21zM24 28h1v1H24zM28 28h3v1H28zM32 28h1v1H32zM2 29h1v1H2zM8 29h1v1H8zM10 29h1v1H10zM12 29h2v1H12zM16 29h1v1H16zM18 29h1v1H18zM23 29h1v1H23zM27 29h1v1H27zM29 29h1v1H29zM31 29h1v1H31zM35 29h1v1H35zM38 29h1v1H38zM0 30h1v1H0zM2 30h3v1H2zM6 30h5v1H6zM12 30h3v1H12zM16 30h2v1H16zM19 30h2v1H19zM22 30h4v1H22zM30 30h3v1H30zM35 30h1v1H35zM38,30 h3v1H38zM2 31h1v1H2zM4 31h1v1H4zM8 31h5v1H8zM15 31h1v1H15zM17 31h1v1H17zM19 31h1v1H19zM21 31h1v1H21zM27 31h3v1H27zM31 31h3v1H31zM35 31h1v1H35zM37 31h1v1H37zM40,31 h1v1H40zM0 32h1v1H0zM5 32h2v1H5zM8 32h1v1H8zM10 32h2v1H10zM15 32h4v1H15zM22 32h3v1H22zM31 32h8v1H31zM40,32 h1v1H40zM8 33h1v1H8zM12 33h3v1H12zM16 33h2v1H16zM19 33h8v1H19zM30 33h1v1H30zM32 33h1v1H32zM36 33h1v1H36zM38,33 h3v1H38zM0 34h7v1H0zM9 34h1v1H9zM11 34h1v1H11zM13 34h1v1H13zM16 34h1v1H16zM18 34h1v1H18zM20 34h3v1H20zM25 34h1v1H25zM29 34h1v1H29zM32 34h1v1H32zM34 34h1v1H34zM36 34h1v1H36zM39 34h1v1H39zM0 35h1v1H0zM6 35h1v1H6zM10 35h1v1H10zM12 35h1v1H12zM16 35h4v1H16zM21 35h1v1H21zM24 35h1v1H24zM26 35h1v1H26zM28 35h2v1H28zM32 35h1v1H32zM36 35h1v1H36zM38 35h1v1H38zM40,35 h1v1H40zM0 36h1v1H0zM2 36h3v1H2zM6 36h1v1H6zM9 36h5v1H9zM15 36h1v1H15zM17 36h2v1H17zM20 36h2v1H20zM24 36h2v1H24zM28 36h1v1H28zM32 36h5v1H32zM38,36 h3v1H38zM0 37h1v1H0zM2 37h3v1H2zM6 37h1v1H6zM8 37h2v1H8zM11 37h1v1H11zM14 37h1v1H14zM16 37h1v1H16zM18 37h1v1H18zM21 37h1v1H21zM25 37h1v1H25zM27 37h1v1H27zM29 37h1v1H29zM31 37h4v1H31zM36 37h3v1H36zM0 38h1v1H0zM2 38h3v1H2zM6 38h1v1H6zM9 38h2v1H9zM13 38h1v1H13zM15 38h1v1H15zM19 38h1v1H19zM21 38h1v1H21zM24 38h1v1H24zM26 38h1v1H26zM29 38h2v1H29zM36 38h2v1H36zM40,38 h1v1H40zM0 39h1v1H0zM6 39h1v1H6zM10 39h4v1H10zM16 39h1v1H16zM18 39h1v1H18zM21 39h1v1H21zM28 39h6v1H28zM35 39h1v1H35zM39 39h1v1H39zM0 40h7v1H0zM9 40h1v1H9zM11 40h2v1H11zM14 40h1v1H14zM17 40h1v1H17zM20 40h1v1H20zM22 40h1v1H22zM26 40h4v1H26zM31 40h2v1H31zM35 40h5v1H35z"></path>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </dialog>
+
+  <!-- Combined Application Script -->
+  <script src="script.js"></script>
+</body>
+</html>
